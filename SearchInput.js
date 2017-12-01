@@ -20,6 +20,10 @@ const styles = StyleSheet.create({
 
 export default ({ onChangeText }) => (
   <View style={styles.container}>
-    <TextInput onChangeText={onChangeText} style={styles.input}/>
+    <TextInput
+      onChangeText={onChangeText}
+      style={styles.input}
+      underlineColorAndroid="transparent"
+    />
   </View>
 );

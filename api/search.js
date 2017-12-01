@@ -16,7 +16,12 @@ export default async ({
   });
   const json = await res.json();
   console.log('search got json', json);
-  const { tracks: { items } } = json;
+  const {
+    tracks: {
+      items,
+    }
+  } = json;
+  // const items = json.tracks.items;
   return items.map(item => ({
     id: item.id,
     title: item.name,

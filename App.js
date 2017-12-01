@@ -5,6 +5,7 @@ import ListItem from './ListItem';
 import SearchInput from './SearchInput';
 import Separator from './Separator';
 import Loading from './Loading';
+import Empty from './Empty';
 
 import search from './api/search';
 import token from './api/token';
@@ -66,21 +67,25 @@ export default class App extends React.Component {
     });
   }
   render() {
-    const { items } = this.state;
+    const { items, isFetching } = this.state;
 
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Hello at Bene Studio's React Native Workshop!</Text>
         <Text style={styles.title}>It's a Spotify listing app</Text>
         <SearchInput onChangeText={(text) => this.handleSearchTextChange(text)} />
-        <FlatList
-          data={items}
-          renderItem={({ item }) => <ListItem item={item} onPress={() => {}} />}
-          keyExtractor={item => item.id}
-          ItemSeparatorComponent={Separator}
-          onEndReached={() => this.handleEndReached()}
-          ListEmptyComponent={Loading}
-        />
+        {
+          (items.length === 0 && isFetching)
+            ? <Loading />
+            : <FlatList
+              data={items}
+              renderItem={({ item }) => <ListItem item={item} onPress={() => {}} />}
+              keyExtractor={item => item.id}
+              ItemSeparatorComponent={Separator}
+              onEndReached={() => this.handleEndReached()}
+              ListEmptyComponent={Empty}
+            />
+        }
       </View>
     );
   }
