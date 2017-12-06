@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
 
 import ListItem from './ListItem';
 import SearchInput from './SearchInput';
@@ -54,6 +54,11 @@ export default class App extends React.Component {
     });
   }
   async handleEndReached() {
+    const { items } = this.state;
+    if (items.length === 0) {
+      console.log('on end reached - but no results');
+      return;
+    }
     console.log('on end reached');
     this.loadNextPage();
   }
@@ -66,20 +71,28 @@ export default class App extends React.Component {
       this.loadNextPage();
     });
   }
+  handleOnItemPress(item) {
+    Alert.alert(`Hello, it's song '${item.title}'`);
+  }
   render() {
     const { items, isFetching } = this.state;
 
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Hello at Bene Studio's React Native Workshop!</Text>
-        <Text style={styles.title}>It's a Spotify listing app</Text>
+        <Text style={styles.title}>It's a Spotify listing app with zero configuration.</Text>
         <SearchInput onChangeText={(text) => this.handleSearchTextChange(text)} />
         {
           (items.length === 0 && isFetching)
             ? <Loading />
             : <FlatList
               data={items}
-              renderItem={({ item }) => <ListItem item={item} onPress={() => {}} />}
+              renderItem={
+                ({ item }) => <ListItem
+                  item={item}
+                  onPress={item => this.handleOnItemPress(item)}
+                />
+              }
               keyExtractor={item => item.id}
               ItemSeparatorComponent={Separator}
               onEndReached={() => this.handleEndReached()}
